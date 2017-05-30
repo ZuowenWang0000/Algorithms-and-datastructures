@@ -1,5 +1,25 @@
 package leetCode;
-
+/*
+ * simple IntegerReverse
+ * 
+ * But there are few stuffs to watch out.
+ * Min_Integer = -2147483648
+ * Max_Integer = 2147483647
+ * I first tried to use lexicon order to solve the problem(that the inverse Integer 
+ * might overflow).
+ * When it's positive, pretty easy, if the given x's inverse. toString 
+ * is as long as MAX_Integer.toString, then compare it using lexicon order. If compareTo 
+ * returns >0, then it's overflow.
+ * 
+ * but if the given integer is negative, then we have to watch out.
+ * we want to firstly make it to positive, then try to handle this same as positive x
+ * BUT!!!!!
+ * if we are given for example -1563847412, then the inverse will be 2147483651, which 
+ * is even bigger than the MAX_Integer. Here I hack it. Since all possible troublesome 
+ * values are -1563847412 ,-1663847412 ,-1763847412,-1863847412 ,-1963847412. 
+ * Simply distinguish them with an if.
+ * 
+ */
 import java.util.Scanner;
 
 public class integerReverse {
