@@ -1,0 +1,88 @@
+import java.util.Scanner;
+// WARNING: All other imports are forbidden!
+
+
+/* NB: For the judge to run the program, do not modify the declaration of the class Main or
+ *     method main() below. The class has to be declared as "class Main { ... }"
+ *     and the method as "public static void main(String[] args) { ... }" */
+class Main {
+
+	// Sorts subarray of A from A[from] to A[from + length - 1],
+	// Returns a sorted array for that interval 
+	private static int[] mergeSort(int[] A, int from, int length) {
+		// No sorting needed for intervals of length 1
+		if (length == 1) {
+			int[] B = new int[length];
+			B[0] = A[from];
+			return B;
+		}
+		
+		// Split length to lenL and lenR, approximately half
+		int lenR = length / 2, lenL = length - lenR;
+		
+		// Recursively sort the left and right halves
+		int[] L = mergeSort(A, from, lenL);
+		int[] R = mergeSort(A, from + lenL, lenR);
+		
+		// Allocate an array for the result and merge L and R into B
+		int[] B = new int[length];
+
+		// TODO: Merge the arrays L and R into B 
+		int pointerL = 0;
+		int pointerR = 0;
+		while(pointerL < lenL && pointerR <lenR){
+			if(L[pointerL]<R[pointerR]){
+				B[pointerL + pointerR] = L[pointerL];
+				pointerL++;
+			}else{
+				B[pointerL + pointerR] = R[pointerR];
+				pointerR++;
+			}
+			
+		
+		}	while(pointerL<lenL){
+				B[pointerL + pointerR] = L[pointerL];
+				pointerL ++;
+			}
+			while(pointerR<lenR){
+				B[pointerR + pointerL] = R[pointerR];
+				pointerR ++;
+			}
+		
+		
+		
+		// Report the progress and return sorted B
+		// Do not change or remove this!
+		System.out.println(length + " " + B[0] + " " + B[length - 1]);
+		return B;
+	}
+
+	public static void main(String[] args) {
+
+		// Read from the standard input with java.util.Scanner
+		Scanner scanner = new Scanner(System.in);
+		
+		// Read the number of cases and loop over the cases
+		int case_no, cases = scanner.nextInt();
+		for (case_no = 0; case_no < cases; case_no++) {
+			// Read the input size, allocate input array and read the input
+			int i, n = scanner.nextInt();
+			int[] A = new int[n];
+			for (i = 0; i < n; i++) {
+				A[i] = scanner.nextInt();
+			}
+			
+			// Call merge-sort on A
+			int[] B = mergeSort(A, 0, n);
+			
+			// Output the sorted array
+			for (i = 0; i < n; i++) {
+				System.out.print(B[i]);
+				if (i < n - 1)
+					System.out.print(" ");
+			}
+			System.out.println();
+		}
+		scanner.close();
+	}
+}
