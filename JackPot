@@ -1,0 +1,55 @@
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
+import java.util.Scanner;
+
+public class JackPot {
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int T = s.nextInt();
+		for (int l = 0; l < T; l++) {
+			int n = s.nextInt();
+			int k = s.nextInt();
+
+			int[][] nk = new int[n + 1][k + 1];
+			for (int i = 1; i < n + 1; i++) {
+				for (int j = 1; j < k + 1; j++) {
+					int a = s.nextInt();
+
+					nk[i][j] = a;
+				}
+			}
+			
+			double[][] t = new double[n+1][k+1];
+			//initialization
+			for(int i =1;i<k+1;i++){
+				t[1][i] = 1.0/k;
+			}
+			
+			for(int i = 2; i<n+1;i++){
+				for(int j = 1;j<k+1;j++){
+					double temp = 0;
+					int v = 1;
+					while(v<k+1){
+						
+						if(nk[i][j]>=nk[i-1][v] ){
+							temp = temp + t[i-1][v];
+						}
+						v++;
+					}
+					t[i][j] = temp * ((double)1.0/k);
+					
+				}
+			}
+			double sum = 0;
+			for(int i = 1;i<k+1;i++){
+				sum = sum + t[n][i];
+			}
+
+			
+			DecimalFormat df = new DecimalFormat("0.0####");
+			df.setRoundingMode(RoundingMode.HALF_DOWN);
+			System.out.println(df.format(sum)); 
+
+		}
+	}
+}
