@@ -1,0 +1,138 @@
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+class Artikulationsknote {
+	private int V;
+
+	private LinkedList<Integer> adj[];
+	int time=0;
+	static final int NIL = -1;
+
+	// constructor
+	Artikulationsknote(int v) {
+		V = v;
+		adj = new LinkedList[v];
+
+		for (int i = 0; i < v; ++i) {
+			adj[i] = new LinkedList();
+		}
+	}
+
+	// methode to add edge into the graph
+	void addEdge(int v, int w) {
+		adj[v].add(w);
+		adj[w].add(v);
+		// put an edge on both vertices' list
+	}
+
+	// A recursive methode find cut vertices using DFS
+
+	// u----current vertice
+	// visited---- put the current vertice into visited set
+	// dfs-----store discovery time of visited vertices
+	// parent----- stores parent vertice in DFS tree
+	// ap[] store articulation vertices
+	void DFS(int u, boolean visited[], int dfs[], int low[], int parent[], boolean ap[]) {
+
+		int children = 0;
+
+		visited[u] = true;
+
+        dfs[u] = low[u] = ++time;
+
+		// go through all vertices adjacent to current vertice
+		Iterator<Integer> i = adj[u].iterator();
+		while (i.hasNext()) {
+			int v = i.next();
+
+			// if v is not visited yet, make it a child of u
+			// in DFS tree make recursion
+			if (!visited[v]) {
+				children++;
+				parent[v] = u;
+				DFS(v, visited, dfs, low, parent, ap);
+				// check if the subtree of v has a connection to
+				// on of the ancestors of u
+				low[u] = Math.min(low[u], low[v]);
+
+				// case1: if u is the root of a DFS tree and has two or more
+				// children.
+				// then it's an AP
+				if (parent[u] == NIL && children > 1) {
+					ap[u] = true;
+				}
+
+				// case2: if u is not root and low value one of its child
+				// is more than dfs value of u, then it's an AP
+				if (parent[u] != NIL && low[v] >= dfs[u]) {
+					ap[u] = true;
+				}
+
+				// Update low value of u for parent function calls.
+		//	System.out.println("v="+v+" low[u]"+low[u]);
+			}	else if (v != parent[u])
+					low[u] = Math.min(low[u], dfs[v]);
+		//	System.out.println("v="+v+" low[u]"+low[u]);
+
+		}
+
+	}
+
+	// The function to do DFS traversal. It uses recursive function APUtil()
+	void AP() {
+		// Mark all the vertices as not visited
+		boolean visited[] = new boolean[V];
+		int dfs[] = new int[V];
+		int low[] = new int[V];
+		int parent[] = new int[V];
+		boolean ap[] = new boolean[V]; // To store articulation points
+
+		// Initialize parent and visited, and ap(articulation point)
+		// arrays
+		for (int i = 0; i < V; i++) {
+			parent[i] = NIL;
+			visited[i] = false;
+			ap[i] = false;
+		}
+
+		// Call the recursive helper function to find articulation
+		// points in DFS tree rooted with vertex 'i'
+		for (int i = 0; i < V; i++)
+			if (visited[i] == false)
+				DFS(i, visited, dfs, low, parent, ap);
+
+		// Now ap[] contains articulation points, print them
+		boolean thereIsAP = false;
+		for (int i = 0; i < V; i++){
+			if (ap[i] == true){
+				System.out.print(i+" ");
+				thereIsAP = true;
+				}
+		}
+		if(!thereIsAP)
+			System.out.print("-1");
+	}
+
+	public static void main(String[] args) {
+		Scanner s = new Scanner(System.in);
+		int t = s.nextInt();
+		for (int i = 0; i < t; i++) {
+			int V = s.nextInt();
+			int edge = s.nextInt();
+
+			Artikulationsknote a = new Artikulationsknote(V);
+			
+			// add edges
+			for (int j = 0; j < edge; j++) {
+				a.addEdge(s.nextInt(), s.nextInt());
+			}
+		
+			a.AP();
+			System.out.println();
+
+		}
+
+		s.close();
+	}
+}
