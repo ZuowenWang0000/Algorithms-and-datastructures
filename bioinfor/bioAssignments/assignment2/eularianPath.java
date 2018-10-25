@@ -175,7 +175,7 @@ public class eularianPath{
 
         int checkPreCon = 0;
         for(int i = 0; i < verticesCounter + 1; i++){
-            Boolean[] subVisited = new Boolean[adjList.get(0).size()];
+            Boolean[] subVisited = new Boolean[adjList.get(i).size()];
             Arrays.fill(subVisited, true);
             visited.add(subVisited);
 
@@ -192,7 +192,10 @@ public class eularianPath{
         //Now startIndex and endIndex are storing the POSSIBLE start and end indices of euler path.
         // if both are -1, then it should be an euler circuit.
 
-        System.out.println("the visited records are :  " + visited.toString());
+        for(int i = 0; i < verticesCounter + 1; i++){
+            System.out.println("the visited records are :  " + Arrays.toString(visited.get(i)));
+        }
+
         System.out.println("memory used : " + (Runtime.getRuntime().totalMemory()/1000000) + "MB");
         
         sc.close();
