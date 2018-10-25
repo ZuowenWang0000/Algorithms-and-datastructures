@@ -5,6 +5,9 @@ import java.util.Hashtable;
 import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.Stack;
+import java.util.Arrays; 
+
+
 import java.lang.Runtime;
 
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
@@ -27,7 +30,7 @@ public class eularianPath{
     static Stack<String> completed = new Stack<String>();
     static int startIndex = -1;
     static int endIndex = -1;
-    
+    static ArrayList<Boolean[]> visited = new ArrayList<>();
 
     public static void main(String[] args) {
         System.out.println("hello");
@@ -172,21 +175,24 @@ public class eularianPath{
 
         int checkPreCon = 0;
         for(int i = 0; i < verticesCounter + 1; i++){
+            Boolean[] subVisited = new Boolean[adjList.get(0).size()];
+            Arrays.fill(subVisited, true);
+            visited.add(subVisited);
+
             int temp = inMinusOut.get(i).intValue();
+            System.out.println("temp = " + temp);
             if(temp == -1){startIndex = i;  checkPreCon++;}
             if(temp == 1){endIndex = i;  checkPreCon++;}
-            if(temp!=0 || temp!=1|| temp!=-1){System.out.println("no euler path!"); System.exit(0);}
+            if(temp!=0 && temp!=1 && temp!=-1){System.out.println("no euler path!1"); System.exit(0);}
 
         }
-        if(checkPreCon != 0 || checkPreCon != 2){System.out.println("no euler path!"); System.exit(0);}
+        System.out.println("checkPreCon = " + checkPreCon);
+        if(checkPreCon != 0 && checkPreCon != 2){System.out.println("no euler path!2"); System.exit(0);}
         
         //Now startIndex and endIndex are storing the POSSIBLE start and end indices of euler path.
         // if both are -1, then it should be an euler circuit.
 
-        
-        
-
-
+        System.out.println("the visited records are :  " + visited.toString());
         System.out.println("memory used : " + (Runtime.getRuntime().totalMemory()/1000000) + "MB");
         
         sc.close();
